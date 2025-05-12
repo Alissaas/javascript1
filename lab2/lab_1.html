@@ -1,1 +1,18 @@
+function pow(x, n) {
+    if (x === 0 && n < 0) {
+        throw new Error("Невозможно возвести 0 в отрицательную степень");
+    }
 
+    if (n === 0) {
+        return 1;
+    }
+
+    let result = 1;
+    const absN = Math.abs(n);
+
+    for (let i = 0; i < absN; i++) {
+        result *= x;
+    }
+
+    return n < 0 ? 1 / result : result;
+}
