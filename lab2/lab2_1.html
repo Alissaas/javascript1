@@ -1,18 +1,58 @@
-function pow(x, n) {
-    if (x === 0 && n < 0) {
-        throw new Error("Невозможно возвести 0 в отрицательную степень");
-    }
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Тесты для lab2.js</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mocha/mocha.css">
+</head>
+<body>
+  <h1>Mocha + Chai: Тесты для <code>pow(x,n)</code></h1>
+  <div id="mocha"></div>
 
-    if (n === 0) {
-        return 1;
-    }
+  <script src="https://cdn.jsdelivr.net/npm/mocha/mocha.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chai/chai.js"></script>
+  <script>mocha.setup('bdd');</script>
 
-    let result = 1;
-    const absN = Math.abs(n);
+  <!-- Подключаем тестируемый файл -->
+  <script src="lab2.js"></script>
 
-    for (let i = 0; i < absN; i++) {
-        result *= x;
-    }
+  <script>
+    const assert = chai.assert;
 
-    return n < 0 ? 1 / result : result;
-}
+    describe('pow(x, n)', function() {
+      it('pow(2, 2) → 4', function() {
+        assert.strictEqual(pow(2, 2), 4);
+      });
+
+      it('pow(2, 0) → 1', function() {
+        assert.strictEqual(pow(2, 0), 1);
+      });
+
+      it('pow(2, -2) → 0.25', function() {
+        assert.strictEqual(pow(2, -2), 0.25);
+      });
+
+      it('pow(5, 1) → 5 (любая степень 1)', function() {
+        assert.strictEqual(pow(5, 1), 5);
+      });
+
+      it('pow(0, 5) → 0 (ноль в положительной степени)', function() {
+        assert.strictEqual(pow(0, 5), 0);
+      });
+
+      it('pow(x, n) с дробным n должен выбрасывать TypeError', function() {
+        assert.throws(() => pow(2, 1.5), TypeError);
+      });
+
+      it('pow(x, n) с некорректными типами аргументов должен выбрасывать TypeError', function() {
+        assert.throws(() => pow('2', 3), TypeError);
+        assert.throws(() => pow(2, '3'), TypeError);
+      });
+    });
+
+    // Запуск тестов
+    mocha.run();
+  </script>
+</body>
+</html>
