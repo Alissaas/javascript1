@@ -5,11 +5,12 @@
 </head>
 <body>
     <script>
-        function Book(title, pubYear, price) {
-            let _title = title;
-            let _pubYear = pubYear;
-            let _price = price;
-            
+        class Book {
+            constructor(title, pubYear, price) {
+                this.title = title;
+                this.pubYear = pubYear;
+                this.price = price;
+            }
             Object.defineProperties(this, {
                 title: {
                     get() { return _title; },
