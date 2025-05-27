@@ -1,17 +1,17 @@
 /**
- * Возвращает дробную часть числа
- * @param {number} num - Исходное число
- * @returns {number} Дробная часть числа
+ * Возвращает дробную часть числа.
+ * @param {number} num - Число, из которого нужно извлечь дробную часть.
+ * @returns {number} Дробная часть числа (в диапазоне [0, 1)).
  */
 export function getDecimal(num) {
-    const decimal = num - Math.floor(num);
-    return parseFloat(decimal.toFixed(10)); // Фиксим проблему с плавающей точкой
+    const decimal = Math.abs(num) - Math.floor(Math.abs(num));
+    return parseFloat((num < 0 ? 1 - decimal : decimal).toFixed(10));
 }
 
 /**
- * Нормализует URL, добавляя https:// в начало при необходимости
- * @param {string} url - Исходный URL
- * @returns {string} Нормализованный URL
+ * Нормализует URL, добавляя 'https://' в начале, если его нет.
+ * @param {string} url - URL для нормализации.
+ * @returns {string} Нормализованный URL с 'https://'.
  */
 export function normalizeUrl(url) {
     if (url.startsWith('http://')) {
@@ -24,9 +24,9 @@ export function normalizeUrl(url) {
 }
 
 /**
- * Проверяет строку на наличие спама (viagra или XXX)
- * @param {string} str - Проверяемая строка
- * @returns {boolean} true, если найден спам
+ * Проверяет строку на наличие подстрок 'viagra' или 'XXX' (без учёта регистра).
+ * @param {string} str - Строка для проверки.
+ * @returns {boolean} true, если найдены запрещённые подстроки, иначе false.
  */
 export function checkSpam(str) {
     const lowerStr = str.toLowerCase();
@@ -34,10 +34,10 @@ export function checkSpam(str) {
 }
 
 /**
- * Усекает строку до указанной длины, добавляя многоточие при необходимости
- * @param {string} str - Исходная строка
- * @param {number} maxlength - Максимальная длина строки
- * @returns {string} Усеченная строка
+ * Усекает строку до указанной длины, добавляя многоточие при необходимости.
+ * @param {string} str - Строка для усечения.
+ * @param {number} maxlength - Максимальная длина строки.
+ * @returns {string} Усечённая строка.
  */
 export function truncate(str, maxlength) {
     if (str.length <= maxlength) {
@@ -47,23 +47,20 @@ export function truncate(str, maxlength) {
 }
 
 /**
- * Преобразует строку с дефисами в camelCase
- * @param {string} str - Исходная строка
- * @returns {string} Строка в camelCase
+ * Преобразует строку с дефисами в camelCase.
+ * @param {string} str - Строка для преобразования.
+ * @returns {string} Строка в camelCase.
  */
 export function camelize(str) {
-    return str.split(/[-_]+/).map((word, index) => {
-        if (index === 0) {
-            return word;
-        }
-        return ucFirst(word);
-    }).join('');
+    return str.split('-')
+        .map((word, index) => index === 0 ? word : ucFirst(word))
+        .join('');
 }
 
 /**
- * Преобразует первую букву строки в верхний регистр
- * @param {string} str - Исходная строка
- * @returns {string} Строка с первой заглавной буквой
+ * Преобразует первую букву строки в верхний регистр.
+ * @param {string} str - Строка для преобразования.
+ * @returns {string} Строка с первой заглавной буквой.
  */
 function ucFirst(str) {
     if (!str) return str;
@@ -71,32 +68,45 @@ function ucFirst(str) {
 }
 
 /**
- * Возвращает массив чисел Фибоначчи до n-го (не включая)
- * @param {number} n - Количество чисел Фибоначчи
- * @returns {bigint[]} Массив чисел Фибоначчи
+ * Возвращает массив чисел Фибоначчи до n-го (не включая его).
+ * @param {number} n - Количество чисел Фибоначчи.
+ * @returns {bigint[]} Массив чисел Фибоначчи.
  */
 export function fibs(n) {
-    if (n <= 0) return [];
-    const result = [0n, 1n];
-    for (let i = 2; i < n; i++) {
-        result.push(result[i-1] + result[i-2]);
+    const result = [];
+    for (let i = 0; i < n; i++) {
+        result.push(fib(i));
     }
-    return result.slice(0, n);
+    return result;
 }
 
 /**
- * Возвращает новый массив, отсортированный по убыванию
- * @param {number[]} arr - Исходный массив
- * @returns {number[]} Новый массив, отсортированный по убыванию
+ * Возвращает n-е число Фибоначчи.
+ * @param {number} n - Порядковый номер числа Фибоначчи.
+ * @returns {bigint} n-е число Фибоначчи.
+ */
+function fib(n) {
+    if (n === 0) return 0n;
+    let a = 0n, b = 1n;
+    for (let i = 2; i <= n; i++) {
+        [a, b] = [b, a + b];
+    }
+    return b;
+}
+
+/**
+ * Возвращает новый массив, отсортированный по убыванию.
+ * @param {number[]} arr - Массив чисел для сортировки.
+ * @returns {number[]} Новый массив, отсортированный по убыванию.
  */
 export function arrReverseSorted(arr) {
     return [...arr].sort((a, b) => b - a);
 }
 
 /**
- * Возвращает массив уникальных значений
- * @param {any[]} arr - Исходный массив
- * @returns {any[]} Массив уникальных значений
+ * Возвращает массив уникальных значений.
+ * @param {Array} arr - Массив с повторяющимися значениями.
+ * @returns {Array} Массив уникальных значений.
  */
 export function unique(arr) {
     return [...new Set(arr)];
