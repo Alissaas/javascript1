@@ -1,3 +1,6 @@
+import {
+    fib
+  } from './fib.js';
 /**
  * Возвращает дробную часть числа.
  * @param {number} num - Число, из которого нужно извлечь дробную часть.
@@ -73,11 +76,9 @@ function ucFirst(str) {
  * @returns {bigint[]} Массив чисел Фибоначчи.
  */
 export function fibs(n) {
-    const result = [];
-    for (let i = 0; i < n; i++) {
-        result.push(fib(i));
-    }
-    return result;
+    let arr = [];
+    for (let i = 0; i < n; i++) arr.push(fib(i));
+    return arr;
 }
 
 /**
