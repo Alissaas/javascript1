@@ -6,13 +6,18 @@
 <body>
     <p>Проверьте консоль</p>
     <script>
-       constructor(title, pubYear, price) {
-        this.title = title;
-        this.pubYear = pubYear;
-        this.price = price;
-           console.log(`Название: ${this.title}, Цена: ${this.price}`);
-            };
-        
+        class Book {
+            constructor(title, pubYear, price) {
+                this.title = title;
+                this.pubYear = pubYear;
+                this.price = price;
+            }
+
+            show() {
+                console.log(`Название: ${this.title}, Цена: ${this.price}`);
+            }
+        }
+
         const book = new Book("JavaScript", 2020, 1000);
         book.show();
     </script>
