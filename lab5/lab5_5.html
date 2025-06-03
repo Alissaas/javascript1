@@ -51,9 +51,6 @@
         #restore-button:hover {
             background: #45a049;
         }
-        .hidden {
-            display: none;
-        }
     </style>
 </head>
 <body>
@@ -70,7 +67,7 @@
         </div>
         <div class="pane">
             <h3>Корова, а также пара слов о диком быке, о волах и о тёлках.</h3>
-            <p>Коро́ва — самка домашнего быка, одомашненного подвида дикого быка, парнокопытного жвачного животного семейства полорогих. Самцы вида называются быками, молодняк — телятами, кастрированные самцы — волами. Молодых (до первой стельности) самок называют тёлками.</p>
+            <p>Коро‌ва — самка домашнего быка, одомашненного подвида дикого быка, парнокопытного жвачного животного семейства полорогих. Самцы вида называются быками, молодняк — телятами, кастрированные самцы — волами. Молодых (до первой стельности) самок называют тёлками.</p>
             <button class="remove-button">[x]</button>
         </div>
     </div>
@@ -80,23 +77,42 @@
     <script>
         const container = document.getElementById('messages-container');
         const restoreButton = document.getElementById('restore-button');
-        let hiddenPanes = []; // Массив для хранения скрытых сообщений
+        let removedPanes = []; // Массив для хранения удалённых сообщений (их HTML)
+
+        // Сохраняем исходное состояние контейнера для восстановления
+        const originalContainerHTML = container.innerHTML;
 
         // Обработчик клика на кнопки удаления
         document.querySelectorAll('.remove-button').forEach(button => {
             button.addEventListener('click', function() {
                 const pane = this.closest('.pane');
-                pane.classList.add('hidden');
-                hiddenPanes.push(pane); // Сохраняем скрытое сообщение
+                // Сохраняем HTML удаляемого сообщения перед удалением
+                removedPanes.push(pane.outerHTML);
+                pane.remove(); // Полностью удаляем элемент из DOM
             });
         });
 
         // Обработчик клика на кнопку восстановления
         restoreButton.addEventListener('click', function() {
-            hiddenPanes.forEach(pane => {
-                pane.classList.remove('hidden');
+            // Восстанавливаем все удалённые сообщения
+            removedPanes.forEach(paneHTML => {
+                // Создаём временный элемент для парсинга HTML
+                const temp = document.createElement('div');
+                temp.innerHTML = paneHTML;
+                const pane = temp.firstChild;
+                
+                // Добавляем обработчик для новой кнопки удаления
+                pane.querySelector('.remove-button').addEventListener('click', function() {
+                    const currentPane = this.closest('.pane');
+                    removedPanes.push(currentPane.outerHTML);
+                    currentPane.remove();
+                });
+                
+                // Добавляем сообщение обратно в контейнер
+                container.appendChild(pane);
             });
-            hiddenPanes = []; // Очищаем массив
+            
+            removedPanes = []; // Очищаем массив
         });
     </script>
 </body>
